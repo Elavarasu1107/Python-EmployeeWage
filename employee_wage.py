@@ -6,23 +6,32 @@ def wage_computation():
     This function computes wage of an employee
     :return: None
     """
-    employee_wage_per_hour = 20
+    is_absent = 0
     is_full_time = 1
     is_part_time = 2
     full_time_hour = 8
     part_time_hour = 4
-    employee_status = random.randint(0, 2)
+    employee_wage_per_hour = 20
+    max_working_days = 20
+    employee_wage_for_month = 0
+    employee_working_days = 0
 
-    if employee_status == is_full_time:
-        print("Employee is Present for a Full Day")
-        employee_wage = full_time_hour * employee_wage_per_hour
-        print("Employee Wage for a Day: ", employee_wage)
-    elif employee_status == is_part_time:
-        print("Employee is Present for a Half Day")
-        employee_wage = part_time_hour * employee_wage_per_hour
-        print("Employee Wage for a Day: ", employee_wage)
-    else:
-        print("Employee is Absent")
+    while employee_working_days < max_working_days:
+        employee_status = random.randint(0, 2)
+
+        if employee_status == is_full_time:
+            employee_wage = full_time_hour * employee_wage_per_hour
+            print("Employee Worked Full Day: ", employee_wage)
+        elif employee_status == is_part_time:
+            employee_wage = part_time_hour * employee_wage_per_hour
+            print("Employee Worked Half Day: ", employee_wage)
+        else:
+            print("Employee is Absent")
+            employee_wage = is_absent * employee_wage_per_hour
+
+        employee_wage_for_month += employee_wage
+        employee_working_days += 1
+    print("Employee wage for a Month: ", employee_wage_for_month)
 
 
 if __name__ == '__main__':
