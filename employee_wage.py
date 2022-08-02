@@ -6,78 +6,10 @@ logging.basicConfig(filename='employee_log.log', encoding='utf-8', level=logging
 logger = logging.getLogger()
 
 
-class Company:
-
-    def __init__(self, comp_name):
-        self.comp_name = comp_name
-        self.emp_dict = {}
-
-    def add(self, emp_object):
-        """
-        This function add employee data to the company
-        :return: dict
-        """
-        try:
-            self.emp_dict.update({emp_object.employee_name: emp_object})
-        except Exception as ex:
-            logger.exception(ex)
-
-    def display(self):
-        """
-        This function display the data entered by the user if present
-        :return: None
-        """
-        try:
-            for emp_name, emp_data in self.emp_dict.items():
-                print(f'{emp_name} {emp_data.employee_wage_for_month} {emp_data.employee_working_days}'
-                      f' {emp_data.employee_working_hours} {emp_data.day_with_wage}')
-        except Exception as ex:
-            logger.exception(ex)
-
-    def update(self, name):
-        """
-        This function update the dictionary if key already exist
-        :return: None
-        """
-        try:
-            if name in self.emp_dict:
-                for emp_name, emp_data in self.emp_dict.items():
-                    if emp_name == name:
-                        user_choice = int(input("Enter 1 to update salary\n2 to update working days\n"
-                                                "3 to update working hours: "))
-                        if user_choice == 1:
-                            updated_sal = int(input("Enter new salary to update: "))
-                            emp_data.employee_wage_for_month = updated_sal
-                        elif user_choice == 2:
-                            updated_days = int(input("Enter Number of working days to Update: "))
-                            emp_data.employee_working_days = updated_days
-                        elif user_choice == 3:
-                            updated_hours = int(input("Enter Working hours to update:"))
-                            emp_data.employee_working_hours = updated_hours
-                        else:
-                            print("Invalid Input")
-            else:
-                print("Employee Not Found!")
-        except Exception as ex:
-            logger.exception(ex)
-
-    def delete(self, name):
-        """
-        This function delete the data in dictionary if key already exist
-        :return:
-        """
-        try:
-            if name in self.emp_dict:
-                self.emp_dict.pop(name)
-            else:
-                print("Employee Not Found!")
-        except Exception as ex:
-            logger.exception(ex)
-
-
 class Employee:
 
-    def __init__(self, employee_name, employee_wage_per_hour=20, max_working_days=20, max_working_hours=100):
+    def __init__(self, employee_name, employee_wage_per_hour=20, max_working_days=20,
+                 max_working_hours=100):
         self.employee_name = employee_name
         self.employee_wage_per_hour = employee_wage_per_hour
         self.max_working_days = max_working_days
@@ -105,7 +37,7 @@ class Employee:
     def wage_computation(self):
         """
         This function computes wage of an employee
-        :return: dict
+        :return: None
         """
         try:
             is_absent = 0
@@ -133,30 +65,191 @@ class Employee:
             logger.exception(ex)
 
 
-if __name__ == '__main__':
-    try:
-        company_name = input("Enter company: ")
-        status = True
-        company = Company(company_name)
-        while status:
-            choice = int(input("Enter 1 to Add employee\n2 to Display\n3 to Update\n4 to Delete\n5 to exit: "))
-            if choice == 1:
-                user_name = input("Enter a Employee Name: ")
+class Company:
+
+    def __init__(self, comp_name):
+        self.comp_name = comp_name
+        self.emp_dict = {}
+
+    def add(self, emp_object):
+        """
+        This function add employee data to the company
+        :return: None
+        """
+        try:
+            self.emp_dict.update({emp_object.employee_name: emp_object})
+        except Exception as ex:
+            logger.exception(ex)
+
+    def get_employee(self, emp_name):
+        """
+        This function retrieve the employee from the dictionary
+        :param emp_name: string
+        :return:
+        """
+        try:
+            return self.emp_dict.get(emp_name)
+        except Exception as ex:
+            logger.exception(ex)
+
+    def display(self):
+        """
+        This function display the data entered by the user if present
+        :return: None
+        """
+        try:
+            for emp_name, emp_data in self.emp_dict.items():
+                print(f'{emp_name} {emp_data.employee_wage_for_month} {emp_data.employee_working_days}'
+                      f' {emp_data.employee_working_hours}')
+        except Exception as ex:
+            logger.exception(ex)
+
+    def update(self, name):
+        """
+        This function update the dictionary if key already exist
+        :return: None
+        """
+        try:
+            if name in self.emp_dict:
                 wage_per_hour = int(input("Enter wage per hour: "))
                 max_days = int(input("Enter max working days: "))
                 max_hours = int(input("Enter max working hours: : "))
-                ley_employee = Employee(user_name, wage_per_hour, max_days, max_hours)
-                ley_employee.wage_computation()
-                company.add(ley_employee)
+                updated_data = Employee(name, wage_per_hour, max_days, max_hours)
+                updated_data.wage_computation()
+                self.emp_dict.update({name: updated_data})
+            else:
+                print("Employee Not Found!")
+        except Exception as ex:
+            logger.exception(ex)
+
+    def delete(self, name):
+        """
+        This function delete the data of an employee if exist
+        :return: None
+        """
+        try:
+            if name in self.emp_dict:
+                self.emp_dict.pop(name)
+            else:
+                print("Employee Not Found!")
+        except Exception as ex:
+            logger.exception(ex)
+
+
+class MultipleCompany:
+
+    def __init__(self):
+        self.comp_dict = {}
+
+    def add_company(self, comp_obj):
+        """
+        This function add company object to company dictionary
+        :param comp_obj: Type
+        :return: None
+        """
+        try:
+            self.comp_dict.update({comp_obj.comp_name: comp_obj})
+        except Exception as ex:
+            logger.exception(ex)
+
+    def display_company_details(self):
+        """
+        his function display the employee data of a company
+        :return: None
+        """
+        try:
+            for comp_name, comp_data in self.comp_dict.items():
+                print(f'Company Name:{comp_name}, Object:{comp_data.emp_dict}')
+        except Exception as ex:
+            logger.exception(ex)
+
+    def get_company(self, company_name):
+        """
+        This function retrieve data of a Company
+        :param company_name: string
+        :return:
+        """
+        return self.comp_dict.get(company_name)
+
+    def update_employee(self, company_name):
+        """
+        This function updates the employee data of a company if exist
+        :param company_name: string
+        :return: None
+        """
+        try:
+            company = self.get_company(company_name)
+            if company is None:
+                print("Company not found")
+            else:
+                emp_name = input("Enter Employee Name: ")
+                employee = company.emp_dict.get(emp_name)
+                if employee is None:
+                    print("Employee Not Found")
+                else:
+                    wage_per_month = int(input("Enter wage per month: "))
+                    working_days = int(input("Enter working days: "))
+                    working_hours = int(input("Enter working hours: : "))
+                    employee.employee_wage_for_month = wage_per_month
+                    employee.employee_working_days = working_days
+                    employee.employee_working_hours = working_hours
+        except Exception as ex:
+            logger.exception(ex)
+
+    def delete_company(self, company_name):
+        """
+        This function deletes the company from the dictionary
+        :param company_name: string
+        :return: None
+        """
+        try:
+            if company_name in self.comp_dict:
+                self.comp_dict.pop(company_name)
+            else:
+                print("Company Not Found")
+        except Exception as ex:
+            logger.exception(ex)
+
+
+if __name__ == '__main__':
+    try:
+        company = ""
+        multiple_company = MultipleCompany()
+        while True:
+            choice = int(input("Enter 1 to Add employee\n2 to Display\n3 to Update\n4 to Delete\n"
+                               "5 to display Company Data\n6 to Update Company Data\n7 to Delete Company Data\n"
+                               "0 to exit: "))
+            if choice == 1:
+                company_name = input("Enter Company Name: ")
+                company = multiple_company.comp_dict.get(company_name)
+                if company is None:
+                    company = Company(company_name)
+                    multiple_company.add_company(company)
+                emp_name = input("Enter a Employee Name: ")
+                wage_per_hour = int(input("Enter wage per hour: "))
+                max_days = int(input("Enter max working days: "))
+                max_hours = int(input("Enter max working hours: : "))
+                employee = Employee(emp_name, wage_per_hour, max_days, max_hours)
+                employee.wage_computation()
+                company.add(employee)
+                multiple_company.add_company(company)
             elif choice == 2:
                 company.display()
             elif choice == 3:
-                user_input = input("Enter a employee name to update: ")
-                company.update(user_input)
+                comp_name = input("Enter Company Name: ")
+                company.update(comp_name)
             elif choice == 4:
-                user_input = input("Enter a employee name to update: ")
-                company.delete(user_input)
+                comp_name = input("Enter Company Name: ")
+                company.delete(comp_name)
+            elif choice == 5:
+                multiple_company.display_company_details()
+            elif choice == 6:
+                comp_name = input("Enter Company Name to update: ")
+                multiple_company.update_employee(comp_name)
+            elif choice == 7:
+                company_name = input("Enter Company Name to delete: ")
+                multiple_company.delete_company(company_name)
             else:
-                status = False
+                break
     except Exception as e:
         logger.exception(e)
