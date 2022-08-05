@@ -98,8 +98,9 @@ class Company:
         """
         try:
             for emp_name, emp_data in self.emp_dict.items():
-                print(f'{emp_name} {emp_data.employee_wage_for_month} {emp_data.employee_working_days}'
-                      f' {emp_data.employee_working_hours}')
+                print(f'Name: {emp_name} \tMonthly Wage: {emp_data.employee_wage_for_month} \t'
+                      f'No of Days Worked: {emp_data.employee_working_days} \t'
+                      f'No of Hours Worked: {emp_data.employee_working_hours}')
         except Exception as ex:
             logger.exception(ex)
 
