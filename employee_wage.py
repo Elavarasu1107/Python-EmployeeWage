@@ -165,20 +165,6 @@ class MultipleCompany:
         """
         return self.comp_dict.get(company_name)
 
-    def update_employee(self, emp_obj, updated_data_dict):
-        """
-        This function updates the employee data of a company if exist
-        :param emp_obj: object
-        :param updated_data_dict: dict
-        :return: None
-        """
-        try:
-            emp_obj.employee_wage_for_month = updated_data_dict.get("wage_per_month")
-            emp_obj.employee_working_days = updated_data_dict.get("working_days")
-            emp_obj.employee_working_hours = updated_data_dict.get("working_hours")
-        except Exception as ex:
-            logger.exception(ex)
-
     def delete_company(self, company_name):
         """
         This function deletes the company from the dictionary
@@ -282,32 +268,6 @@ def display_company_function():
         logger.exception(ex)
 
 
-def update_company_function():
-    """
-    This function gets user data to update employee of a company
-    :return: None
-    """
-    try:
-        comp_name = input("Enter Company Name to update: ")
-        comp_obj = multiple_company.get_company(comp_name)
-        if comp_obj is None:
-            print("Company not found")
-        else:
-            name = input("Enter Employee name to update: ")
-            employee_obj = comp_obj.get_employee(name)
-            if employee_obj is None:
-                print("Employee not found")
-            else:
-                wage_per_hour = int(input("Enter Employee Monthly Wage: "))
-                working_days = int(input("Enter working days: "))
-                working_hours = int(input("Enter working hours: : "))
-                multiple_company.update_employee(employee_obj, {"wage_per_month": wage_per_hour,
-                                                                "working_days": working_days,
-                                                                "working_hours": working_hours})
-    except Exception as ex:
-        logger.exception(ex)
-
-
 def delete_company_function():
     """
     This function get a user data to delete a company
@@ -325,13 +285,12 @@ if __name__ == '__main__':
         multiple_company = MultipleCompany()
         while True:
             choice = int(input("Enter 1 to Add employee\n2 to Display\n3 to Update Employee\n4 to Delete Employee\n"
-                               "5 to display Company Data\n6 to Update Company Data\n7 to Delete Company Data\n"
+                               "5 to display Company Data\n6 to Delete Company Data\n"
                                "0 to exit: "))
             if choice == 0:
                 break
             choice_dict = {1: add_employee_function, 2: display_employee_function, 3: update_employee_function,
-                           4: delete_employee_function, 5: display_company_function, 6: update_company_function,
-                           7: delete_company_function}
+                           4: delete_employee_function, 5: display_company_function, 6: delete_company_function}
             choice_dict.get(choice)()
     except Exception as e:
         logger.exception(e)
